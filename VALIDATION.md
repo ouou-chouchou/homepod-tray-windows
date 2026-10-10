@@ -4,11 +4,11 @@
 
 ## 构建和自动测试
 
-公开源码副本独立配置，从 GitHub 获取固定提交的 Mbed TLS，无旧构建缓存参与编译。Release 编译成功，三个 CTest 项目全部通过（audio_policy_tests、raop_core_tests、raop_loop_tests）；最终整套运行约 9.76 秒。
+从已提交公开仓库重新克隆到空目录并独立配置，从 GitHub 获取固定提交的 Mbed TLS，无旧构建缓存参与编译。Release 编译成功，三个 CTest 项目全部通过（audio_policy_tests、raop_core_tests、raop_loop_tests）；最终整套运行约 11.98 秒。
 
 重新构建的 HomePodTray.exe 为 1310720 字节，SHA256：
 
-`B0788FBE7443EDC94D50EA6B81A8F3F8BFFC53942CA6A0613F109F0BF6006AB7`
+`3A5638DCBD8A302A54F351409A0CCDC175ED59ED9170E6F7ED727624779D0D8C`
 
 测试使用假接收器和本机回环，不连接真实 HomePod，不播放测试音。部分上游编译警告仍存在，不影响本次构建结果。
 
