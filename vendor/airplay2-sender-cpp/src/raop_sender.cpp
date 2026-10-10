@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
+// Modified for HomePodTray: Transient event encryption, live prebuffer/pause recovery and gap fades.
 //
 // v0.66.x, RaopSender implementation (AirPlay-1 / RAOP + AirPlay-2 audio sender).
 //

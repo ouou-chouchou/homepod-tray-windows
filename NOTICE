@@ -1,0 +1,5 @@
+HomePodTray
+This product includes software developed by Andreas Wendorf (Akustikrausch).
+Upstream: https://github.com/akustikrausch/airplay2-sender-cpp
+The protocol library is modified for live capture buffering, transient event encryption and UDP diagnostics.
+Original notices and third-party licenses are preserved in vendor/airplay2-sender-cpp.

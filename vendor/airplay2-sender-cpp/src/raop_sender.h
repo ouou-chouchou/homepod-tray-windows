@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
+// Modified for HomePodTray: Live capture gating and diagnostic API additions.
 #pragma once
 //
 // raop_sender.h -- the airplay sender state machine. this IS the recipe.

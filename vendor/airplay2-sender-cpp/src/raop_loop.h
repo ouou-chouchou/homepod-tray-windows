@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
+// Modified for HomePodTray: UDP send diagnostics are exposed to the application.
 #pragma once
 //
 // raop_loop.h -- the bundled, dependency-free host for RaopSender.

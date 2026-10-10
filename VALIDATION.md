@@ -1,27 +1,33 @@
-# 构建与验证记录
+# 0.1.0 验证记录
 
-验证日期：2026-10-08，Windows / MSVC 19.44 / Visual Studio 2022 Build Tools / x64 Release。
+验证日期：2026-10-10。Windows x64、Visual Studio 2022 Build Tools / MSVC 19.44、Windows SDK、CMake。
 
-构建产物：`build/Release/HomePodTray.exe`，965120 字节，生成时间 12:52:48。
+## 构建和自动测试
 
-SHA-256：`F79F54DCC6078F746C569E405BA28FCAADAB4BE331B9BC30BDAAB282A1BD5949`。
+公开源码副本独立配置，从 GitHub 获取固定提交的 Mbed TLS，无旧构建缓存参与编译。Release 编译成功，三个 CTest 项目全部通过（audio_policy_tests、raop_core_tests、raop_loop_tests）；最终整套运行约 9.76 秒。
 
-最终 `ctest --test-dir build -C Release --output-on-failure`：3/3 通过，11.46 秒。包含策略模拟、协议假接收器（新增真实 sender 预缓冲/缺音恢复/暂停分类和 transient event 响应检查）、本机回环网络宿主检查。未访问 HomePod，未渲染到声卡。
+重新构建的 HomePodTray.exe 为 1310720 字节，SHA256：
 
-PE 依赖检查：仅 Windows 自带的 ole32、MMDevAPI、SHELL32、ADVAPI32、COMCTL32、IPHLPAPI、bcrypt、WS2_32、KERNEL32、USER32；Release 使用静态 MSVC runtime，无单独 VC runtime DLL 依赖。
+`B0788FBE7443EDC94D50EA6B81A8F3F8BFFC53942CA6A0613F109F0BF6006AB7`
 
-**未执行新版 EXE。** 因此这份验证不包含真实 UI 操作、HomePod 发现/配对/播放、音量、用户路由切换、长时间稳定性或听感。不能把编译和自动检查通过解释成原滋滋声已修复。新应用的能力边界与后续测试方法见 README.md。
+测试使用假接收器和本机回环，不连接真实 HomePod，不播放测试音。部分上游编译警告仍存在，不影响本次构建结果。
 
-原安装目录、原托盘源码/EXE、VB-Cable 驱动、音频设置、应用输出路由、桌面和启动项均未修改。本地依赖源码缓存仅用于构建，新的构建输出均在本目录。
+## 安装包
 
-## UI 版增量验证（13:05）
+IExpress 安装包使用以下命令进行 Windows PowerShell 5.1 测试：
 
-新增默认显示的主窗口；关闭隐藏到托盘，左键托盘/右键打开窗口以及重复启动可重新显示。原后台音频与协议实现未修改。
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File packaging/test-package.ps1 -InstallerPath "./HomePodTray-0.1.0-Windows-x64/01-HomePodTray-Setup.exe"
+```
 
-UI 版产物：`build-ui/Release/HomePodTray.exe`，989184 字节，生成时间 13:05:49。
+已验证：完整解包、预期载荷文件清单、脚本解析、临时目录安装、两个快捷方式目标、卸载注册表项、许可文本安装、重复安装、拒绝 TEMP 外测试路径、移除测试安装和测试快捷方式/注册表入口。
 
-SHA-256：`6F133E6B8EE6B0B0D216D16BCCD171392EC573CCCA6C3D52DC53253D307AB790`。
+测试模式所有文件操作限定为新建的临时目录，注册表限定测试键，不修改真实桌面/开始菜单，不添加防火墙规则，不启动播放器、不连接 HomePod。
 
-这次只修改 `app/tray.cpp`、README 与构建目录忽略规则，使用独立 `build-ui` 输出，不覆盖正在运行的旧候选。重新构建后策略、协议 core 和本机回环测试均通过。UI 交互尚未由本子代理运行；主线程负责部署与可见窗口检查。原托盘候选的 SHA-256 仍为上述 `F79F54...`。
+## 实机与尚未覆盖的部分
 
-在部分 Windows 网络配置中，HomePod 需要发送 timing/control UDP 回发送端。发布安装包使用仅限本地子网的程序级 UDP 入站规则；实际连接仍需用户根据自己的网络和 HomePod 状态验证。
+该应用的窗口、图标、手动连接和真实 HomePod 播放在此前测试中已验证；本次发布不修改应用音频和 UI 源码。当前使用中的工作版本和已安装 VB-Cable 均保留。
+
+本次未对真实安装的管理员 UAC/防火墙授权做自动交互测试，也未在第二台干净 Windows 机器做端到端首次播放验收。未中断正在运行的 HomePodTray 来启动另一个同互斥锁实例。
+
+这些检查不能证明所有网络环境兼容，或杂音/卡顿已经根治。首版定位为实验性发布；真实长时间稳定性、PIN 接收器、本地监听同步仍需后续验证。

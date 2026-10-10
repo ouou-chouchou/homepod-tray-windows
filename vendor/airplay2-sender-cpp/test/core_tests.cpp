@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
+// Modified for HomePodTray: Fake-receiver coverage for buffering, recovery and transient events.
 //
 // core_tests.cpp -- the protocol core against an in-process fake receiver.
 //

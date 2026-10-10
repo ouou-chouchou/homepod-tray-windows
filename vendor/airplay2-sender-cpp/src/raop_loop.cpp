@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
+// Modified for HomePodTray: UDP send failures are checked and counted.
 //
 // raop_loop.cpp -- the bundled poll()/WSAPoll() host for RaopSender.
 //
