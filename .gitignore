@@ -1,0 +1,15 @@
+build/
+build-ui/
+build-icon/
+backups/
+tools/vbcable/
+.vs/
+CMakeFiles/
+cmake-build-*/
+*.sln
+*.vcxproj*
+*.user
+*.suo
+*.log
+settings.txt
+settings.tmp

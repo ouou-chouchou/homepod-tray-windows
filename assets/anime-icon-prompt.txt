@@ -1,0 +1,11 @@
+Use case: stylized-concept
+Asset type: Windows desktop application icon, square 1024x1024 master artwork.
+Primary request: An original anime-style icon for a Windows app that casts music to a HomePod mini.
+Subject: One charming anime music-spirit mascot, drawn as a compact chibi portrait with a small rounded white smart speaker integrated naturally into the composition. Friendly expression, clear large eyes, distinctive simple silhouette.
+Style: Polished Japanese anime illustration, clean confident outlines, restrained cel shading, crisp highlights. Attractive and expressive rather than a generic corporate symbol.
+Composition: Centered close-up emblem with one dominant subject filling approximately 80% of the canvas. Keep generous clear margins. Simplify details so the subject remains readable at 32x32 and 48x48.
+Backdrop: Simple deep navy background with a soft cyan accent; rounded-square application badge composition. No detailed scenery.
+Palette: Deep navy, cyan, soft white; a small warm accent is acceptable.
+Constraints: One finished icon, not a collage or icon sheet. No words, letters, watermark, trademark or existing fictional character. No photo-realism, no complex background, no tiny ornamental clutter. Do not depict a full screenshot or desktop mockup.
+
+Generation status: Generated successfully on 2026-10-08 with ai-media-gen, profile gpt-dsg, model gpt-image-2, size 1024x1024, quality high, no reference images. Saved as homepod-anime-ai.png. Rounded alpha mask and Windows ICO conversion are local post-processing; the AI master is preserved unchanged.
