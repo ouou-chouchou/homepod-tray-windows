@@ -4,13 +4,15 @@ Windows 中文窗口与托盘应用，将勾选应用的音频通过局域网 Ai
 
 ![项目图标](assets/homepod-anime-preview.png)
 
-本项目独立开发，与 Apple、QQ 音乐、VB-Audio 没有官方关联。HomePod、AirPlay 等商标属于各自权利人。0.1.0 为实验版本：已验证真实 HomePod 播放，但长期稳定性、不同网络和设备兼容性仍需测试，不能保证卡顿或杂音已根治。
+本项目独立开发，与 Apple、QQ 音乐、VB-Audio 没有官方关联。HomePod、AirPlay 等商标属于各自权利人。0.1.0 为实验版本：此前工作版本曾验证真实 HomePod 播放；最终安装包的正常安装、防火墙授权及首次播放尚未验收。长期稳定性、不同网络和设备兼容性仍需测试。
 
 ## 安装与首次使用
 
 支持 Windows 11 x64；按进程采集 API 要求 Windows build 20348 及以上，普通 Windows 10 22H2 build 19045 不支持该模式。Windows 10 用户请升级到支持的系统；虚拟声卡端点诊断模式未作为 Windows 10 完整兼容承诺。
 
-在 GitHub Releases 下载 `HomePodTray-0.1.0-Windows-x64.zip`。尚未上传 GitHub 的本地版本位于同名发布文件夹。解压后：
+**v0.1.0 正在准备预发布，目前尚无可下载的 Release。** 发布状态请查看 [GitHub Releases](https://github.com/ouou-chouchou/homepod-tray-windows/releases)。以下是拟发布的 `HomePodTray-0.1.0-Windows-x64.zip` 使用步骤，验收状态见 [验证记录](VALIDATION.md)；包准备完成不代表正常安装与首次播放已验证。
+
+解压完整 ZIP 后：
 
 1. 运行 `01-HomePodTray-Setup.exe`，安装至当前用户的稳定程序目录。
 2. 打开包内 VB-Cable 官方链接，自行下载、解压官方完整驱动包，以管理员身份运行其中的 x64 安装程序，再重启电脑。详细步骤见 [VB-Cable 安装说明](docs/INSTALL-VBCABLE.md)。
@@ -20,6 +22,8 @@ Windows 中文窗口与托盘应用，将勾选应用的音频通过局域网 Ai
 6. 选择“仅 HomePod”，点击“应用设置”和“连接”，再开始播放音乐。
 
 安装器可选请求管理员权限创建防火墙规则，拒绝也能完成安装。软件未做数字签名，Windows 可能显示未知发布者提示。卸载可从 Windows“已安装的应用”操作；保留用户音频设置和配置日志，VB-Cable 独立管理。
+
+以上安装行为已实现，但目前只通过临时目录隔离安装/卸载测试，尚未验证真实桌面和开始菜单快捷方式、正常卸载、管理员授权接受/拒绝以及新安装版本的首次播放。
 
 ## 功能
 
@@ -65,7 +69,7 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File packaging/build-release.
 
 WASAPI 采集支持 44100/48000 Hz、单/双声道、float32 或 PCM 16/24/32，内部保持浮点重采样/混合，最终输出 44100 Hz / 16-bit / 双声道。使用上游 AirPlay 2 实时 RAOP 与加密 ALAC，通过局域网传输。
 
-音频预缓冲目标 200 ms，欠载重新预缓冲；缺音边缘淡出/恢复淡入，时钟补偿限 ±2000 ppm。日志区分活跃欠载、空闲、预缓冲、UDP 发送错误和重传。重置只是恢复操作，不代表根因修复。
+音频预缓冲目标 200 ms，欠载重新预缓冲；缺音边缘淡出/恢复淡入，时钟补偿限 ±2000 ppm。日志区分活跃欠载、空闲、预缓冲、UDP 发送错误和重传。
 
 本地与 HomePod 输出未对齐延迟。多应用精确时间戳对齐、任意多物理输出、完整 PIN/密码配对、IPv6/跨网段发现、设备切换自动恢复、自动更新尚未实现。主要面向无需 PIN 的 HomePod 临时配对。
 
