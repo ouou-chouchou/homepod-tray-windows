@@ -4,7 +4,7 @@ $repo = Split-Path -Parent $PSScriptRoot
 if (-not $BuildDir) { $BuildDir = Join-Path $repo 'build' }
 if (-not $OutputRoot) { $OutputRoot = $repo }
 $BuildDir = [IO.Path]::GetFullPath($BuildDir)
-$releaseName = 'HomePodTray-0.1.0-Windows-x64'
+$releaseName = 'HomePodTray-0.1.1-Windows-x64'
 $release = Join-Path $OutputRoot $releaseName
 $zip = Join-Path $OutputRoot ($releaseName + '.zip')
 if ((Test-Path -LiteralPath $release) -or (Test-Path -LiteralPath $zip)) { throw 'Release output already exists. Move it aside before rebuilding.' }
@@ -61,7 +61,7 @@ InstallPrompt=
 DisplayLicense=
 FinishMessage=HomePodTray installation is complete.
 TargetName=$targetSed
-FriendlyName=HomePodTray 0.1.0
+FriendlyName=HomePodTray 0.1.1
 AppLaunched=install.cmd
 PostInstallCmd=<None>
 AdminQuietInstCmd=

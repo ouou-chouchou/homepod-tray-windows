@@ -37,7 +37,7 @@ foreach ($path in $links) {
 @{InstallDir=$installDir; Links=$links; UninstallKey=$uninstallKey; TestMode=$testMode} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $installDir 'installation.json') -Encoding UTF8
 New-Item -Path $uninstallKey -Force | Out-Null
 $properties = @{
-    DisplayName='HomePodTray'; DisplayVersion='0.1.0'; Publisher='HomePodTray contributors'
+    DisplayName='HomePodTray'; DisplayVersion='0.1.1'; Publisher='HomePodTray contributors'
     InstallLocation=$installDir; DisplayIcon=$exe
     UninstallString=('powershell.exe -NoProfile -ExecutionPolicy Bypass -File "' + (Join-Path $installDir 'uninstall.ps1') + '"')
 }
