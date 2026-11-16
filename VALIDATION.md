@@ -40,3 +40,19 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File packaging/test-package.p
 ## 预发布准备核对
 
 README 显示、链接及最终 ZIP 的核对见 [v0.1.0 发布记录](docs/releases/v0.1.0-preparation.md)。完整功能和安装说明见 [v0.1.0 发布说明](docs/releases/v0.1.0.md)。
+
+## 后续修复：引擎主循环受系统定时器精度限制（2026-11-16）
+
+在另一台干净的 Windows 11（build 26200）上安装 v0.1.0 发布包后复现：连接握手全部成功，能听到约 3 秒声音且明显卡顿，随后固定报“采集队列超过 1 秒：已停止，避免静默丢帧”并断开。换 48 kHz 与 44.1 kHz 采集格式、改回重采样与直通，断开时间都是 3.0 秒，与采样率无关。
+
+定位：引擎线程用 `poll/WSAPoll` 的 2 ms 超时驱动主循环，但工程内未调用 `timeBeginPeriod`。Windows 默认时钟节拍为 15.6 ms，实测 2 ms 套接字等待实际耗时 15.56 ms，主循环只有约 64 Hz；每次循环最多搬运 441 帧（10 ms 音频），即 28.2k 帧/秒，低于采集端的 44.1k 帧/秒，队列以约 15.9k 帧/秒累积，约 2.8 秒达到 `frames.size() > 44100` 的阈值——与实测每次 3.0 秒断开吻合。卡顿同源：只有约 64% 的音频被送出。
+
+修复：引擎线程启动时调用 `timeBeginPeriod(1)`、结束时调用 `timeEndPeriod(1)`，并把每次搬运上限由 441 帧放宽到 4410 帧，作为循环被拖慢时的第二层保险。同进程实测 `select(2 ms)` 由 15.56 ms 降到 2.42 ms。
+
+需要强调的是：Windows 10 2004 之后 `timeBeginPeriod` 只对调用进程生效，外部进程无法代为提升，因此该修复必须落在程序自身。v0.1.0 的验收环境当时存在其他提升定时器精度的进程，掩盖了该问题；本次是在没有此类进程的干净系统上复现的。
+
+修复后重新构建：MSVC 14.44.35207、Windows SDK 10.0.26100.0、Ninja，CTest 3/3 通过（audio_policy_tests 0.03 s、raop_core_tests 0.42 s、raop_loop_tests 9.15 s）。产物为 1311232 字节，SHA256：
+
+`B8354C0774BE31DE34CAA6F926EED654B18BD0B16F0704B2DBB85F36485BBFC5`
+
+在本机连续播放期间缓冲稳定在预缓冲目标 200 ms 附近，未再出现队列超限。仍待补充：另一台干净系统的完整安装包验收，以及长时间运行、掉网恢复测试。
