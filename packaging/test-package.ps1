@@ -20,7 +20,7 @@ foreach ($name in @('install.ps1','uninstall.ps1','allow-firewall.ps1')) {
 $installed = Join-Path $testRoot 'Programs\HomePodTray'
 $exe = Join-Path $installed 'HomePodTray.exe'
 Assert ((Get-FileHash -LiteralPath $exe).Hash -eq (Get-FileHash -LiteralPath (Join-Path $extract 'HomePodTray.exe')).Hash) 'installed executable hash matches payload'
-Assert ((Get-ItemProperty -LiteralPath $key).DisplayVersion -eq '0.1.0') 'test uninstall registry entry created'
+Assert ((Get-ItemProperty -LiteralPath $key).DisplayVersion -eq '0.1.1') 'test uninstall registry entry created'
 $shell = New-Object -ComObject WScript.Shell
 $links = @((Join-Path $testRoot 'Desktop\HomePodTray.lnk'), (Join-Path $testRoot 'StartMenu\HomePodTray.lnk'))
 foreach ($link in $links) { Assert ($shell.CreateShortcut($link).TargetPath -eq $exe) 'shortcut target matches installation' }

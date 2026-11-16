@@ -4,13 +4,13 @@ Windows 中文窗口与托盘应用，将勾选应用的音频通过局域网 Ai
 
 ![项目图标](assets/homepod-anime-preview.png)
 
-本项目独立开发，与 Apple、QQ 音乐、VB-Audio 没有官方关联。HomePod、AirPlay 等商标属于各自权利人。0.1.0 为实验版本：最终安装包已在当前 Windows 环境完成安装、授权、启动、播放和卸载验收；长期稳定性、不同网络和设备兼容性仍需持续测试。
+本项目独立开发，与 Apple、QQ 音乐、VB-Audio 没有官方关联。HomePod、AirPlay 等商标属于各自权利人。0.1.1 为实验版本：修复了默认系统定时器下引擎主循环跑不满实时速率、导致连接约 3 秒后断开的问题；最终安装包已在当前 Windows 环境完成安装、授权、启动、播放和卸载验收，长期稳定性、不同网络和设备兼容性仍需持续测试。
 
 ## 安装与首次使用
 
 支持 Windows 11 x64；按进程采集 API 要求 Windows build 20348 及以上，普通 Windows 10 22H2 build 19045 不支持该模式。Windows 10 用户请升级到支持的系统；虚拟声卡端点诊断模式未作为 Windows 10 完整兼容承诺。
 
-从 [GitHub Releases](https://github.com/ouou-chouchou/homepod-tray-windows/releases) 下载 [HomePodTray-0.1.0-Windows-x64.zip](https://github.com/ouou-chouchou/homepod-tray-windows/releases/download/v0.1.0/HomePodTray-0.1.0-Windows-x64.zip)，并可下载 [SHA-256 校验文件](https://github.com/ouou-chouchou/homepod-tray-windows/releases/download/v0.1.0/HomePodTray-0.1.0-Windows-x64.zip.sha256)。本机安装与首次使用验收记录见 [验证记录](VALIDATION.md)。
+从 [GitHub Releases](https://github.com/ouou-chouchou/homepod-tray-windows/releases) 下载 [HomePodTray-0.1.1-Windows-x64.zip](https://github.com/ouou-chouchou/homepod-tray-windows/releases/download/v0.1.1/HomePodTray-0.1.1-Windows-x64.zip)，并可下载 [SHA-256 校验文件](https://github.com/ouou-chouchou/homepod-tray-windows/releases/download/v0.1.1/HomePodTray-0.1.1-Windows-x64.zip.sha256)。本机安装与首次使用验收记录见 [验证记录](VALIDATION.md)。
 
 解压完整 ZIP 后：
 
