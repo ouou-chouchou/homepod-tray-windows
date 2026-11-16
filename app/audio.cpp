@@ -5,6 +5,8 @@
 #include "raop_loop.h"
 #include "ring_buffer.h"
 #include <windows.h>
+#include <timeapi.h>
+#pragma comment(lib, "winmm.lib")
 #include <audioclient.h>
 #include <audioclientactivationparams.h>
 #include <audiopolicy.h>
@@ -313,6 +315,12 @@ struct AudioEngine::Impl {
     void run(Config config) {
         const HRESULT com=CoInitializeEx(nullptr,COINIT_MULTITHREADED);
         if(FAILED(com)) { status(Status::State::Error,"无法初始化 COM"); running=false; return; }
+        // The engine loop is paced by poll()/WSAPoll() timeouts. Windows defaults
+        // to a 15.6 ms timer tick, so a 2 ms wait really sleeps ~15.6 ms (~64 Hz)
+        // and the mixer can only move 441 frames per turn (~28k frames/s), which
+        // falls behind 44.1k realtime capture within ~3 s. Raise this process's
+        // timer resolution for the lifetime of the engine thread.
+        const bool timerRaised = timeBeginPeriod(1) == TIMERR_NOERROR;
         try {
             if (config.capture==CaptureMode::Applications && config.selected.empty()) {
                 status(Status::State::Waiting,"未勾选应用：不采集任何声音");
@@ -374,7 +382,9 @@ struct AudioEngine::Impl {
                     controller.update(network?double(ring.availableRead())/88200.:.20,receiving,dt);
                     // Do not consume source FIFOs until the destination has space for the
                     // complete mixed block. Bounded source queues fail visibly, never drop.
-                    size_t frames=441;
+                    // 10 ms per turn assumes a ~100 Hz loop; on a coarse timer the
+                    // loop is far slower, so allow up to 100 ms of backlog per turn.
+                    size_t frames=4410;
                     bool anySource=false;
                     for(auto& [pid,source]:sources) {
                         // A recent source whose FIFO is briefly empty must wait for its
@@ -429,6 +439,7 @@ struct AudioEngine::Impl {
                 if(failed && !stop){log("session error: "+failure);status(Status::State::Error,failure);}
             }
         } catch(const std::exception& error) { log(std::string("engine error: ")+error.what());status(Status::State::Error,error.what()); }
+        if(timerRaised) timeEndPeriod(1);
         CoUninitialize(); running=false;
         if(stop)status(Status::State::Disconnected,"已断开；不会自动抢占 HomePod");
     }
